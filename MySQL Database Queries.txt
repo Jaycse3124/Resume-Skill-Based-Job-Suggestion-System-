@@ -1,0 +1,89 @@
+MySQL Database queries for Resume Analyzer
+
+-- Step 1: Create the JobMatchingDB database
+CREATE DATABASE JobMatchingDB;
+
+-- Step 2: Switch to the JobMatchingDB database
+USE JobMatchingDB;
+
+-- Step 3: Create the JobRoles table
+-- This table stores different job roles
+CREATE TABLE JobRoles (
+    id INT AUTO_INCREMENT PRIMARY KEY,  -- Unique identifier for each job role
+    role_name VARCHAR(100) NOT NULL,    -- Name of the job role
+    description TEXT                    -- Description of the job role
+);
+
+-- Step 4: Create the Skills table
+-- This table stores various skills associated with job roles
+CREATE TABLE Skills (
+    id INT AUTO_INCREMENT PRIMARY KEY,  -- Unique identifier for each skill
+    skill_name VARCHAR(100) NOT NULL    -- Name of the skill
+);
+
+-- Step 5: Create the JobRoleSkills table
+-- This table establishes a many-to-many relationship between job roles and skills
+CREATE TABLE JobRoleSkills (
+    job_role_id INT,                    -- Foreign key referencing the JobRoles table
+    skill_id INT,                       -- Foreign key referencing the Skills table
+    FOREIGN KEY (job_role_id) REFERENCES JobRoles(id),  -- Establishing the relationship with JobRoles
+    FOREIGN KEY (skill_id) REFERENCES Skills(id),       -- Establishing the relationship with Skills
+    PRIMARY KEY (job_role_id, skill_id)  -- Primary key is a combination of job_role_id and skill_id
+);
+
+-- Step 6: Insert some example job roles into the JobRoles table
+INSERT INTO JobRoles (role_name, description)
+VALUES 
+    ('DevOps Engineer', 'Automates and manages infrastructure and CI/CD pipelines using cloud and DevOps tools'),
+    ('Cloud Engineer', 'Designs and manages cloud infrastructure and services across AWS, Azure, or GCP'),
+    ('Data Engineer', 'Builds and maintains data pipelines for analysis and reporting'),
+    ('Android Developer', 'Develops and maintains Android applications using Java or Kotlin'),
+    ('Machine Learning Engineer', 'Builds and deploys machine learning models to solve real-world problems');
+
+-- Step 7: Insert example skills into the Skills table
+INSERT INTO Skills (skill_name) VALUES 
+    ('Python'), ('C++'), ('Docker'), ('Kubernetes'), ('AWS'),
+    ('Azure'), ('Google Cloud'), ('SQL'), ('Machine Learning'),
+    ('Power BI'), ('Java'), ('Kotlin'), ('Linux'), ('CI/CD'),
+    ('Terraform'), ('Hadoop'), ('Spark'), ('Android SDK');
+
+-- Step 8: Select all data from the JobRoles table (for reference or debugging purposes)
+SELECT * FROM JobRoles;
+
+-- Step 9: Select all data from the Skills table (for reference or debugging purposes)
+SELECT * FROM Skills;
+
+-- Step 10: Insert job role and skill mappings into the JobRoleSkills table
+-- Associating specific skills with their respective job roles
+INSERT INTO JobRoleSkills (job_role_id, skill_id)
+VALUES 
+    -- DevOps Engineer
+    (1, 3),  -- Docker
+    (1, 4),  -- Kubernetes
+    (1, 13), -- CI/CD
+    
+    -- Cloud Engineer
+    (2, 5),  -- AWS
+    (2, 6),  -- Azure
+    (2, 7),  -- Google Cloud
+    
+    -- Data Engineer
+    (3, 1),  -- Python
+    (3, 8),  -- SQL
+    (3, 16), -- Hadoop
+    (3, 17), -- Spark
+    
+    -- Android Developer
+    (4, 10), -- Java
+    (4, 11), -- Kotlin
+    (4, 18), -- Android SDK
+    
+    -- Machine Learning Engineer
+    (5, 1),  -- Python
+    (5, 9);  -- Machine Learning
+
+-- Step 11: Query to retrieve all job roles along with their associated skills
+SELECT jr.role_name, s.skill_name 
+FROM JobRoles jr
+JOIN JobRoleSkills jrs ON jr.id = jrs.job_role_id
+JOIN Skills s ON jrs.skill_id = s.id;
