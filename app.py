@@ -8,8 +8,8 @@ app.config['UPLOAD_FOLDER'] = 'uploads'  # Ensure this directory exists
 
 # Database configuration
 db_config = {
-    'user': 'root',  # Replace with your MySQL username
-    'password': 'Jay@ry@20032005',  # Replace with your MySQL password
+    'user': 'user',  # Replace with your MySQL username
+    'password': 'Passwaord',  # Replace with your MySQL password
     'host': 'localhost',
     'database': 'JobMatchingDB'
 }
